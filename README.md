@@ -5,10 +5,10 @@
 Comments in the code attempt to explain any functions. Contact for clarification/updating comments.
 
 #### OVERVIEW:
-	A golf game. A player must combine all 'balls' on screen in order to win.
-	Balls are naturally attracted to eachother, and may start orbits around eachother.
-	Players can click/touch on the screen to create gravity wells to which the balls are attracted to.
-	Lower time spent using/creating these wells will result in a higher score.
+A golf game. A player must combine all 'balls' on screen in order to win.
+Balls are naturally attracted to eachother, and may start orbits around eachother.
+Players can click/touch on the screen to create gravity wells to which the balls are attracted to.
+Lower time spent using/creating these wells will result in a higher score.
 
 ##### IMPORTANT TODO:
 
@@ -33,17 +33,17 @@ Comments in the code attempt to explain any functions. Contact for clarification
 
 #### SPECIFICS:
 Balls have their own:
-	*Color
-	*Mass
-	*Radius
-	*Position
-	*Velocity
-	*Acceleration
+* Color
+* Mass
+* Radius
+* Position
+* Velocity
+* Acceleration
 	
 A player can create an invisible 'ball' upon interaction with the game.
 It has no color, velocity, acceleration, or radius, and has a constant mass; This is to encourage planning of the use of one's clicking.
 	
 Powerups [Ideas]:
-	*Mass-of-Click upgrade/downgrade
-	*Speedup/Slowdown for individual balls
-	*'God Mode': allows for the immediate stop of any ball upon click/interaction
+*Mass-of-Click upgrade/downgrade	
+*Speedup/Slowdown for individual balls
+*'God Mode': allows for the immediate stop of any ball upon click/interaction
