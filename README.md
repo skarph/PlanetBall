@@ -14,10 +14,10 @@ Lower time spent using/creating these wells will result in a higher score.
 
 - [x] Objective Ball System
 - [x] Collision System:
-- [x] Gravity :exclamation: FIX :exclamation:
+- [x] Gravity
 - [ ] (Re)Implement spin mechanic
 - [ ] Creation of ball objects in game (GUI)
-- [ ] Make collisions more realistic (see example included, resulting 'ball' off-center
+- [ ] Make collisions more realistic (see example included, resulting 'ball' off-center :exclamation:
 ##### SLIGHTLY LESS IMPORTANT TODO:
 
 - [ ] Fix canvas burn
@@ -26,10 +26,10 @@ Lower time spent using/creating these wells will result in a higher score.
 - [ ] Rudimentary GUI
 
 ##### LONG TERM GOALS:
-1. Make game visually appealing
-1. Add pause function
-1. Levels, progression
-1. Level Designer [?]
+* Make game visually appealing
+* Add pause function
+* Levels, progression
+* Level Designer [?]
 
 #### SPECIFICS:
 Balls have their own:
@@ -47,3 +47,9 @@ Powerups [Ideas]:
 * Mass-of-Click upgrade/downgrade	
 * Speedup/Slowdown for individual balls
 * 'God Mode': allows for the immediate stop of any ball upon click/interaction
+
+#### RELEASE HISTORY:
+
+0.0.0: initial collision/physics work, never released
+0.0.1: removed spin mechanic, fixed collisions crashing game; code cleaning
+0.0.2: fixed bug where gravity did not properlly attract; code cleaning
