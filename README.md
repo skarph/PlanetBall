@@ -17,7 +17,7 @@ Lower time spent using/creating these wells will result in a higher score.
 - [x] Gravity
 - [ ] (Re)Implement spin mechanic
 - [ ] Creation of ball objects in game (GUI)
-- [ ] Make collisions more realistic (see example included, resulting 'ball' off-center :exclamation:
+- [ ] Make collisions more realistic (see example included, resulting 'ball' off-center) :exclamation:
 ##### SLIGHTLY LESS IMPORTANT TODO:
 
 - [ ] Fix canvas burn
