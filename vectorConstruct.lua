@@ -86,6 +86,14 @@ function V.__div(op1,op2)-->>divide vectors/scalar
 	end
 end
 
+function V.__eq(op1,op2)
+	if not(getmetatable(op1)==getmetatable(op2)) then error("Both tables must be vector-formated! [V.vectorize("..tostring(op1)..")]"); end
+	if not(op1.DIMCOUNT==op2.DIMCOUNT) then return false; end
+	for i=1,op1.DIMCOUNT do
+		if not(op1[i]==op2[i]) then return false; end
+	end
+	return true;
+end
 function V.norm(self)-->>normalize vector
 	return (self/self:getMagnitude());--sad.
 end

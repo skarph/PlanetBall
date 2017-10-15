@@ -66,7 +66,7 @@ function BALL.update(self,dt)--UPDATE
 	end
 end
 
-function BALL.eat(ball1,ball2)-->>adds all of the properties of the greater radius ball to lesser radius, destroys lesser
+function BALL.eat(ball1,ball2)-->>adds all of the properties of the greater radius ball to lesser radius, destroys lesser. TOREDO
 	
 	if ball2.rad>ball1.rad then
 		ball2.rad = ball2.rad+ball1.rad
@@ -87,11 +87,11 @@ function BALL.eat(ball1,ball2)-->>adds all of the properties of the greater radi
 	end
 end
 
-function BALL.draw(self)
-	local mR,mG,mB,mA = love.graphics.getColor();
+function BALL.draw(self)-->>call for painting ball
+	local mR,mG,mB,mA = love.graphics.getColor();--remember old colors
 	love.graphics.setColor(self.color);
 	love.graphics.circle('fill',self.pos[1],self.pos[2],self.rad);--draw self *shrug*
-	love.graphics.setColor(mR,mG,mB,mA);
+	love.graphics.setColor(mR,mG,mB,mA);--reapply old colors
 end
 
 function BALL.grav() -->>similar to doCollisions, does not play nice when integrated with doCollisions
@@ -99,14 +99,21 @@ function BALL.grav() -->>similar to doCollisions, does not play nice when integr
 		for j=i+1, BALL.lastIndex do
 			if BALL.list[i] and BALL.list[j] then
 				
-				BALL.list[i].acc = BALL.list[i].acc + ((BALL.G*BALL.list[i].mass*BALL.list[j].mass)/((BALL.list[i].pos - BALL.list[j].pos)*(BALL.list[i].pos - BALL.list[j].pos))/BALL.list[i].mass)
-				--applies force divided by mass (acceleration)
-				BALL.list[j].acc = BALL.list[j].acc + (-1*((BALL.G*BALL.list[i].mass*BALL.list[j].mass)/((BALL.list[i].pos - BALL.list[j].pos)*(BALL.list[i].pos - BALL.list[j].pos))/BALL.list[j].mass))
-				--inverts for opposite vector
-				print(GTIME..'> GRAV: '..i..'>'..j)
-				print(GTIME..'> GRAV: '..i..'<'..j)
+				local dir = (BALL.list[j].pos - BALL.list[i].pos):norm()
+				local dist = (BALL.list[j].pos - BALL.list[i].pos):getMagnitude()
+
+				local accPlus = (
+					(BALL.G*BALL.list[i].mass*BALL.list[j].mass)
+					/
+					(dist*dist)
+					/
+					BALL.list[i].mass
+				);
+				--calculates force divided by mass (acceleration)
+				
+				BALL.list[i].acc = BALL.list[i].acc + (dir*accPlus) --increase acc. by appropriate vector force
+				BALL.list[j].acc = BALL.list[j].acc + (-1*dir*accPlus) --increase acc. by opposite vector force
 			end
 		end
 	end
-	print('\n');
 end
