@@ -51,5 +51,7 @@ Powerups [Ideas]:
 #### RELEASE HISTORY:
 
 0.0.0: initial collision/physics work, never released
+
 0.0.1: removed spin mechanic, fixed collisions crashing game; code cleaning
+
 0.0.2: fixed bug where gravity did not properlly attract; code cleaning
