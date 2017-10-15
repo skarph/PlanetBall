@@ -32,17 +32,18 @@ Comments in the code attempt to explain any functions. Contact for clarification
 1. Level Designer [?]
 
 #### SPECIFICS:
-	Balls have their own:
+Balls have their own:
 	*Color
 	*Mass
 	*Radius
 	*Position
 	*Velocity
 	*Acceleration
-	A player can create an invisible 'ball' upon interaction with the game.
-	It has no color, velocity, acceleration, or radius, and has a constant mass; This is to encourage planning of the use of one's clicking.
 	
-	Powerups [Ideas]:
+A player can create an invisible 'ball' upon interaction with the game.
+It has no color, velocity, acceleration, or radius, and has a constant mass; This is to encourage planning of the use of one's clicking.
+	
+Powerups [Ideas]:
 	*Mass-of-Click upgrade/downgrade
 	*Speedup/Slowdown for individual balls
 	*'God Mode': allows for the immediate stop of any ball upon click/interaction
