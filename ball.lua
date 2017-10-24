@@ -1,11 +1,10 @@
-
 BALL = {}
 
 BALL.list={}-->>table that contains all balls
 
 BALL.lastIndex=0;--Last index of BALL.list
 
-BALL.G = 1 -->>Gravititational constant
+BALL.G = 0.1 -->>Gravititational constant
 
 function BALL.getNewID() -->>gets a new id for a new ball 'obj'
 	local returnVal = 1;
@@ -53,12 +52,11 @@ function BALL.new(x,y,rad,mass,color) -->> creates a new ball object, stores obj
 end
 
 function BALL.update(self,dt)--UPDATE
-	if self==nil then return; end
+	if self==nil then return; end 
 	self.colCheck = {};
 	self.hasCol = {};
-	self.pos = self.pos + (dt*self.vel);
-	print(GTIME..'> UPDATE: '..self.id..".acc == "..self.acc[1]..","..self.acc[2]);
-	self.vel = self.vel + (dt*self.acc);
+	self.pos = self.pos + (self.vel*dt)
+	self.vel = self.vel + (self.acc*dt);
 	self.rad = self.rad+(self.spin*0.25)--increase/decrease radius based on spin. quadratic (0,0)->(1,1), vertex (0.25,-0.125)
 	
 	if not(self.iFrames==0) then --update invincibility
@@ -98,21 +96,18 @@ function BALL.grav() -->>similar to doCollisions, does not play nice when integr
 	for i=1, BALL.lastIndex do
 		for j=i+1, BALL.lastIndex do
 			if BALL.list[i] and BALL.list[j] then
-				
 				local dir = (BALL.list[j].pos - BALL.list[i].pos):norm()
 				local dist = (BALL.list[j].pos - BALL.list[i].pos):getMagnitude()
 
-				local accPlus = (
+				local force = (
 					(BALL.G*BALL.list[i].mass*BALL.list[j].mass)
 					/
 					(dist*dist)
-					/
-					BALL.list[i].mass
 				);
 				--calculates force divided by mass (acceleration)
 				
-				BALL.list[i].acc = BALL.list[i].acc + (dir*accPlus) --increase acc. by appropriate vector force
-				BALL.list[j].acc = BALL.list[j].acc + (-1*dir*accPlus) --increase acc. by opposite vector force
+				BALL.list[i].acc = (dir*(force/BALL.list[i].mass)) --increase acc. by appropriate vector force
+				BALL.list[j].acc = (-1*dir*(force/BALL.list[j].mass)) --increase acc. by opposite vector force
 			end
 		end
 	end
