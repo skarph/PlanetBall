@@ -54,4 +54,5 @@ Powerups [Ideas]:
 0.0.1: removed spin mechanic, fixed collisions crashing game; code cleaning
 
 0.0.2: fixed bug where gravity did not properly attract; code cleaning
+
 |a: fixed other gravity bug
