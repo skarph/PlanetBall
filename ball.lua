@@ -1,10 +1,11 @@
 BALL = {}
+BALL.__index = BALL;
 
 BALL.list={}-->>table that contains all balls
 
 BALL.lastIndex=0;--Last index of BALL.list
 
-BALL.G = 0.1 -->>Gravititational constant
+BALL.G = 5 -->>Gravititational constant
 
 function BALL.getNewID() -->>gets a new id for a new ball 'obj'
 	local returnVal = 1;
@@ -32,7 +33,7 @@ function BALL.doCollisions() -->>does collision check for all balls
 	end
 end
 
-function BALL.new(x,y,rad,mass,color) -->> creates a new ball object, stores object in BALL.list, returns id of ball
+function BALL.new(x,y,rad,mass,color,lock) -->> creates a new ball object, stores object in BALL.list, returns id of ball
 	local self = {};
 	setmetatable(self,{__index=BALL});
 	self.id = BALL.getNewID();
@@ -47,17 +48,20 @@ function BALL.new(x,y,rad,mass,color) -->> creates a new ball object, stores obj
 	self.colCheck = {}--collision check litt
 	self.hasCol = {};--post-solve list
 	self.iFrames = 0;--time where colls don't count
+	self.lock = lock --whether or not ball is static
 	BALL.list[self.id] = self;
 	return self.id;
 end
 
 function BALL.update(self,dt)--UPDATE
-	if self==nil then return; end 
+	if self==nil or self.lock then return; end
 	self.colCheck = {};
 	self.hasCol = {};
 	self.pos = self.pos + (self.vel*dt)
 	self.vel = self.vel + (self.acc*dt);
 	self.rad = self.rad+(self.spin*0.25)--increase/decrease radius based on spin. quadratic (0,0)->(1,1), vertex (0.25,-0.125)
+	
+	self.acc = V.vectorize({0,0}); --reset acceleration
 	
 	if not(self.iFrames==0) then --update invincibility
 		self.iFrames=self.iFrames-dt
@@ -65,24 +69,15 @@ function BALL.update(self,dt)--UPDATE
 end
 
 function BALL.eat(ball1,ball2)-->>adds all of the properties of the greater radius ball to lesser radius, destroys lesser. TOREDO
-	
-	if ball2.rad>ball1.rad then
-		ball2.rad = ball2.rad+ball1.rad
-		--ball2.spin = ball2.spin+ball1.spin + math.abs(((ball2.vel-ball1.vel)/ball2.vel):getMagnitude())
-		ball2.vel = (ball2.vel * (ball2.mass/(ball2.mass+ball1.mass))) + (ball1.vel * (ball1.mass/(ball2.mass+ball1.mass)));--upadte vel on percent weight
-		ball2.mass = ball2.mass+ball1.mass;--add mass
-		ball2.color = {(ball2.color[1]+ball1.color[1])*0.5,(ball2.color[2]+ball1.color[2])*0.5,(ball2.color[3]+ball1.color[3])*0.5,(ball2.color[4]+ball1.color[4])*0.5}; --mix color, fix later
-		ball2.acc = V.vectorize({0,0});--nerf acceleration
-		BALL.list[ball1.id]=nil;--destroy other
-	else
-		ball1.rad = ball1.rad+ball2.rad; --ditto
-		--ball1.spin = ball1.spin+ball2.spin + math.abs(((ball1.vel-ball2.vel)/ball1.vel):getMagnitude())
+		local pM1 = (ball1.mass/(ball1.mass+ball2.mass));--percent mass of ball1
+		local pM2 = (ball2.mass/(ball1.mass+ball2.mass));--percent mass of ball2
+
+		ball1.pos = ball1.pos*(ball1.rad/(ball1.rad+ball2.rad)) + ball2.pos*(ball2.rad/(ball1.rad+ball2.rad)); --adds positions based on percent size
+		ball1.rad = ball1.rad+ball2.rad; --increases size
 		ball1.vel = (ball1.vel * (ball1.mass/(ball1.mass+ball2.mass))) + (ball2.vel * (ball2.mass/(ball1.mass+ball2.mass)));
 		ball1.mass = ball1.mass+ball2.mass;
-		ball1.color = {(ball2.color[1]+ball1.color[1])*0.5,(ball2.color[2]+ball1.color[2])*0.5,(ball2.color[3]+ball1.color[3])*0.5,(ball2.color[4]+ball1.color[4])*0.5};
-		ball1.acc = V.vectorize({0,0});
-		BALL.list[ball2.id]=nil;
-	end
+		ball1.color = {(ball1.color[1]*pM1) + (ball2.color[1]*pM2), (ball1.color[2]*pM1) + (ball2.color[2]*pM2), (ball1.color[3]*pM1) + (ball2.color[3]*pM2), (ball1.color[4]*pM1) + (ball2.color[4]*pM2)} --color change based on percent mass
+		BALL.list[ball2.id]=nil; --destroy the second body
 end
 
 function BALL.draw(self)-->>call for painting ball
@@ -106,8 +101,8 @@ function BALL.grav() -->>similar to doCollisions, does not play nice when integr
 				);
 				--calculates force divided by mass (acceleration)
 				
-				BALL.list[i].acc = (dir*(force/BALL.list[i].mass)) --increase acc. by appropriate vector force
-				BALL.list[j].acc = (-1*dir*(force/BALL.list[j].mass)) --increase acc. by opposite vector force
+				BALL.list[i].acc = BALL.list[i].acc + (dir*(force/BALL.list[i].mass)) --increase acc. by appropriate vector force
+				BALL.list[j].acc = BALL.list[j].acc + (-1*dir*(force/BALL.list[j].mass)) --increase acc. by opposite vector force
 			end
 		end
 	end

@@ -11,23 +11,19 @@ Players can click/touch on the screen to create gravity wells to which the balls
 Lower time spent using/creating these wells will result in a higher score.
 
 ##### IMPORTANT TODO:
-
 - [x] Objective Ball System
 - [x] Collision System:
 - [x] Gravity
-- [ ] (Re)Implement spin mechanic
 - [ ] Creation of ball objects in game (GUI) :exclamation:
+- [ ] Levels
+- [ ] Level select
 ##### SLIGHTLY LESS IMPORTANT TODO:
-
-- [ ] Fix canvas burn :exclamation:
-- [ ] Make rudimentary debug system :exclamation:
-- [ ] Find a way to combine collision checking and gravity
-- [ ] Rudimentary GUI :exclamation:
+- [ ] graphics
+- [x] Fix canvas burn :exclamation:
+- [x] Rudimentary GUI
 
 ##### LONG TERM GOALS:
 * Make game visually appealing
-* Add pause function
-* Levels, progression
 * Level Designer [?]
 
 #### SPECIFICS:
@@ -56,3 +52,5 @@ Powerups [Ideas]:
 0.0.2: fixed bug where gravity did not properly attract; code cleaning
 
 |a: fixed other gravity bug
+
+0.0.3: Added rudimentary GUI, added pause function, fixed combining, made trails better.
