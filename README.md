@@ -1,5 +1,5 @@
 # Planet Ball 
-## Version 0.0.2a PRE-ALPHA
+## Version 0.0.3 ALPHA
 ### *A planetary golf-like game built on LÖVE 0.10.2*
 
 Comments in the code attempt to explain any functions. Contact for clarification/updating comments.
