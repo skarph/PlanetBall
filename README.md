@@ -1,5 +1,5 @@
 # Planet Ball 
-## Version 0.0.3 ALPHA
+## Version 0.0.4 ALPHA
 ### *A planetary golf-like game built on LÖVE 0.10.2*
 
 Comments in the code attempt to explain any functions. Contact for clarification/updating comments.
@@ -10,16 +10,17 @@ Balls are naturally attracted to eachother, and may start orbits around eachothe
 Players can click/touch on the screen to create gravity wells to which the balls are attracted to.
 Lower time spent using/creating these wells will result in a higher score.
 
+##### IMPORTANT UDPATE:
+When menus are introduced, the game will oficially go into beta! exciting stuff!
 ##### IMPORTANT TODO:
 - [x] Objective Ball System
-- [x] Collision System:
+- [x] Collision System
 - [x] Gravity
-- [ ] Creation of ball objects in game (GUI) :exclamation:
-- [ ] Levels
+- [x] Levels
 - [ ] Level select
+- [ ] Menus :exclamation:
 ##### SLIGHTLY LESS IMPORTANT TODO:
 - [ ] graphics
-- [x] Fix canvas burn :exclamation:
 - [x] Rudimentary GUI
 
 ##### LONG TERM GOALS:
@@ -54,3 +55,5 @@ Powerups [Ideas]:
 |a: fixed other gravity bug
 
 0.0.3: Added rudimentary GUI, added pause function, fixed combining, made trails better.
+
+0.0.4: Added levels and json support for them

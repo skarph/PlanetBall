@@ -35,6 +35,11 @@ end
 
 function BALL.new(x,y,rad,mass,color,lock) -->> creates a new ball object, stores object in BALL.list, returns id of ball
 	local self = {};
+	if color then
+		if not color[1] then
+			color = nil;
+		end
+	end
 	setmetatable(self,{__index=BALL});
 	self.id = BALL.getNewID();
 	self.pos = V.vectorize({x,y});

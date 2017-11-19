@@ -7,40 +7,36 @@ function love.load()
 	love.graphics.setCanvas(canvas);
 	love.graphics.setBlendMode("alpha", "alphamultiply");
 	
+	JSON = require("json");	
 	require("ball");
-	require('vectorConstruct');
-	require('gui');
+	require("vectorConstruct");
+	require("gui");
+	require("assetHandler");
+	require("levelLoader");
+	ASSET.load();--loads all assets
+	
+	love.graphics.setFont(ASSET.fonts.JosefinSans.BoldItalic);--sets font. All assets are acessed through the assets folder and its subdirectories
 	
 	math.randomseed(os.time());
 	
-	local bC = 25 -- count of bodies
-	local DfC = 50 --radius from center of bodies
-	
-	for i=1, bC do
-		local id = BALL.new((winW/2)+(DfC*math.cos(math.pi*2*(i/bC))),(winH/2)+(DfC*math.sin(math.pi*2*(i/bC))),5,100); --spawn balls
-		BALL.list[id].vel = V.vectorize({math.cos( math.pi*2*(i/bC) + (math.pi/2) ),math.sin(math.pi*2*(i/bC) + (math.pi/2))}):norm() * math.sqrt(BALL.G* 25 * 50 / 50); --set speed for semistable orbit
-	end
-	
-	--[[idPar = BALL.new(winW/2,winH/2,50,50000)
-	idSat = BALL.new(winW/2+150,winH/2,5,50)
-	BALL.list[idSat].vel = V.vectorize({0,1}) * 
-	math.sqrt(BALL.G*BALL.list[idPar].mass / ( BALL.list[idSat].pos - BALL.list[idPar].pos ):getMagnitude());]]
-	--Uncoment for singular orbit
-	
+	LEVEL.load(ASSET.levels.example);--loads the example level (example.json)
+
 	doUpdate = false; --do updates for balls
 	love.keyboard.setKeyRepeat(false);
 
-	slide = SLIDER.new({200,50,400,100},-10,10,BALL.G,{nil,nil},"G CONST");--create new slider
+	slide = SLIDER.new({200,50,400,100},-10,10,BALL.G,{2,2},"G CONST");--create new slider
 	toggle = TOGGLE.new({winW - 100, winH - 100, winW, winH }, true, {nil,nil}, "Pause");--create new toggle
+	levelToggle = TOGGLE.new({winW - 100, 0, winW, 100}, true, {nil,nil}, "level");
 	timeMult = 1;
 	touchMass = 500; --mass of invisible ball spawned upon click
 	love.graphics.setCanvas(canvas);
-	
 end
-
+ 
 function love.update(dt)
+	
 	slide:update();
 	toggle:update();
+	levelToggle:update();
 	
 	BALL.G = slide.value;
 	
@@ -48,6 +44,16 @@ function love.update(dt)
 	
 	dtime = dt * timeMult --time delta used for updating balls
 	
+	if not levelToggle.value and LEVEL.currentLevel then
+		toggle.value = true;
+		doUpdate = false;
+		LEVEL.unload();--unloads the current level
+	elseif levelToggle.value and not LEVEL.currentLevel then
+		LEVEL.load(ASSET.levels.example);
+		toggle.value = false;
+		doUpdate = true;
+	end
+		
 	if doUpdate then
 		GTIME = GTIME + dtime; --update global timer
 		local xC,yC;
@@ -64,7 +70,7 @@ function love.draw()
 	love.graphics.setCanvas(canvas);
 	--love.graphics.draw(canvas);
 	for i=1, BALL.lastIndex do
-		pcall(BALL.draw,BALL.list[i]);--incase BALL[i]==nil
+		err,msg = pcall(BALL.draw,BALL.list[i]);--incase BALL[i]==nil
 	end
 		
 	love.graphics.setColor(255,255,255,255);
@@ -79,7 +85,8 @@ function love.draw()
 	love.graphics.setColor(0xFF,0xFF,0xFF,0xFF);
 	slide:render();
 	toggle:render();
-
+	levelToggle:render();
+	
 	for i=1, BALL.lastIndex do
 		pcall(BALL.draw,BALL.list[i]);--incase BALL[i]==nil
 	end
@@ -113,5 +120,9 @@ function update(dtime,xC,yC)
 			BALL.list[i]:update(dtime);
 		end
 	end
+	
+end
+
+function shortJSON(str)
 	
 end
