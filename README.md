@@ -56,4 +56,4 @@ Powerups [Ideas]:
 
 0.0.3: Added rudimentary GUI, added pause function, fixed combining, made trails better.
 
-0.0.4: Added levels and json support for them
+0.0.4: Added levels and json support for levels, added asset handler
