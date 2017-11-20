@@ -19,17 +19,18 @@ function love.load()
 	
 	math.randomseed(os.time());
 	
-	LEVEL.load(ASSET.levels.example);--loads the example level (example.json)
+	LEVEL.load(ASSET.levels.circle);--loads the example level (example.json)
 
 	doUpdate = false; --do updates for balls
 	love.keyboard.setKeyRepeat(false);
 
-	slide = SLIDER.new({200,50,400,100},-10,10,BALL.G,{2,2},"G CONST");--create new slider
+	slide = SLIDER.new({200,50,400,100},-5,50,BALL.G,{2,2},"G CONST");--create new slider
 	toggle = TOGGLE.new({winW - 100, winH - 100, winW, winH }, true, {nil,nil}, "Pause");--create new toggle
 	levelToggle = TOGGLE.new({winW - 100, 0, winW, 100}, true, {nil,nil}, "level");
 	timeMult = 1;
 	touchMass = 500; --mass of invisible ball spawned upon click
 	love.graphics.setCanvas(canvas);
+	
 end
  
 function love.update(dt)
@@ -44,14 +45,16 @@ function love.update(dt)
 	
 	dtime = dt * timeMult --time delta used for updating balls
 	
-	if not levelToggle.value and LEVEL.currentLevel then
+	if levelToggle.value and LEVEL.currentLevel==ASSET.levels.example then
 		toggle.value = true;
 		doUpdate = false;
 		LEVEL.unload();--unloads the current level
-	elseif levelToggle.value and not LEVEL.currentLevel then
+		LEVEL.load(ASSET.levels.circle);
+	elseif not levelToggle.value and LEVEL.currentLevel==ASSET.levels.circle then
+		toggle.value = true;
+		doUpdate = false;
+		LEVEL.unload();--unloads the current level
 		LEVEL.load(ASSET.levels.example);
-		toggle.value = false;
-		doUpdate = true;
 	end
 		
 	if doUpdate then
