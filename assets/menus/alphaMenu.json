@@ -1,0 +1,25 @@
+[
+	{"type"    : "SLIDER",
+	 "pos"     : "{200,50,400,100}",
+	 "val"     : "{-7,50,5}",
+	 "varStr"  : ["BALL","G"],
+	 "title"   : "G CONST",
+	 "fntSCL"  : "{2,2}"
+	},
+	
+	{"type"    : "TOGGLE",
+	 "pos"     : "{winW - 100,winH  - 100,winW,winH}",
+	 "val"     : true,
+	 "varStr"  : "doUpdate",
+	 "title"   : "Moving",
+	 "fntSCL"  : "{nil,nil}"
+	},
+	
+	{"type"    : "BUTTON",
+	 "pos"     : "{winW - 100,0,winW,100}",
+	 "val"     : "function() local found = false; for k,v in pairs(ASSET.levels) do if found then LEVEL.unload(); LEVEL.load(v); end if v==LEVEL.currentLevel then found = true; end end end",
+	 "varStr"  : null,
+	 "title"   : "Level\nCycle",
+	 "fntSCL"  : "{nil,nil}"
+	}
+]

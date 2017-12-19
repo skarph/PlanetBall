@@ -13,6 +13,7 @@ function love.load()
 	require("gui");
 	require("assetHandler");
 	require("levelLoader");
+	require("menuLoader");
 	ASSET.load();--loads all assets
 	
 	love.graphics.setFont(ASSET.fonts.JosefinSans.BoldItalic);--sets font. All assets are acessed through the assets folder and its subdirectories
@@ -20,13 +21,11 @@ function love.load()
 	math.randomseed(os.time());
 	
 	LEVEL.load(ASSET.levels.circle);--loads the example level (example.json)
-
+	MENU.load(ASSET.menus.alphaMenu);
+	
 	doUpdate = false; --do updates for balls
 	love.keyboard.setKeyRepeat(false);
 
-	slide = SLIDER.new({200,50,400,100},-5,50,BALL.G,{2,2},"G CONST");--create new slider
-	toggle = TOGGLE.new({winW - 100, winH - 100, winW, winH }, true, {nil,nil}, "Pause");--create new toggle
-	levelToggle = TOGGLE.new({winW - 100, 0, winW, 100}, true, {nil,nil}, "level");
 	timeMult = 1;
 	touchMass = 500; --mass of invisible ball spawned upon click
 	love.graphics.setCanvas(canvas);
@@ -35,28 +34,8 @@ end
  
 function love.update(dt)
 	
-	slide:update();
-	toggle:update();
-	levelToggle:update();
-	
-	BALL.G = slide.value;
-	
-	doUpdate = not toggle.value;
-	
 	dtime = dt * timeMult --time delta used for updating balls
-	
-	if levelToggle.value and LEVEL.currentLevel==ASSET.levels.example then
-		toggle.value = true;
-		doUpdate = false;
-		LEVEL.unload();--unloads the current level
-		LEVEL.load(ASSET.levels.circle);
-	elseif not levelToggle.value and LEVEL.currentLevel==ASSET.levels.circle then
-		toggle.value = true;
-		doUpdate = false;
-		LEVEL.unload();--unloads the current level
-		LEVEL.load(ASSET.levels.example);
-	end
-		
+	MENU.update();
 	if doUpdate then
 		GTIME = GTIME + dtime; --update global timer
 		local xC,yC;
@@ -71,7 +50,7 @@ end
 function love.draw()
 	
 	love.graphics.setCanvas(canvas);
-	--love.graphics.draw(canvas);
+	
 	for i=1, BALL.lastIndex do
 		err,msg = pcall(BALL.draw,BALL.list[i]);--incase BALL[i]==nil
 	end
@@ -86,9 +65,7 @@ function love.draw()
 	love.graphics.setColor(0xFF,0xFF,0xFF,0x0F);
 	love.graphics.draw(canvas);
 	love.graphics.setColor(0xFF,0xFF,0xFF,0xFF);
-	slide:render();
-	toggle:render();
-	levelToggle:render();
+	MENU.render();
 	
 	for i=1, BALL.lastIndex do
 		pcall(BALL.draw,BALL.list[i]);--incase BALL[i]==nil
