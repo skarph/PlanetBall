@@ -7,6 +7,7 @@ BALL.lastIndex=0;--Last index of BALL.list
 
 BALL.G = 5 -->>Gravititational constant
 
+BALL.maxC = 10000 -- number used when determing alpha value. (mass/BALL.maxC)*0xFF
 function BALL.getNewID() -->>gets a new id for a new ball 'obj'
 	local returnVal = 1;
 	for i=1,BALL.lastIndex+1 do
@@ -22,7 +23,17 @@ function BALL.doCollisions() -->>does collision check for all balls
 			if BALL.list[i] and BALL.list[j] then
 				if (not(BALL.list[i].colCheck[j] and BALL.list[j].colCheck[i])) and (BALL.list[i].iFrames==0 and BALL.list[j].iFrames==0)  then --AAAAAAAAAAAAAAAAAAAAAAAAAAAA
 					--If the balls have not colided and neither ball has invincibility, although they shouldn'tve collieded. *shrug*
-					if (BALL.list[i].pos-BALL.list[j].pos):getMagnitude()<0.75*(BALL.list[i].rad+BALL.list[j].rad) then --AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+					local bbi = nil --big ball index
+					local lbi = nil --long beach island
+					if BALL.list[i].rad>=BALL.list[j].rad then
+						bbi = i;
+						lbi = j;
+					else
+						bbi = j;
+						lbi = i;
+					end
+					
+					if (BALL.list[i].pos-BALL.list[j].pos):getMagnitude()<(BALL.list[bbi].rad) then --AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 						BALL.list[i].colCheck[j] = true;
 						BALL.list[j].colCheck[i] = true;
 						BALL.eat(BALL.list[i],BALL.list[j]);
@@ -98,7 +109,15 @@ function BALL.grav() -->>similar to doCollisions, does not play nice when integr
 			if BALL.list[i] and BALL.list[j] then
 				local dir = (BALL.list[j].pos - BALL.list[i].pos):norm()
 				local dist = (BALL.list[j].pos - BALL.list[i].pos):getMagnitude()
-
+				
+				if dist < BALL.list[i].rad or dist < BALL.list[j].rad then
+					if BALL.list[i].rad > BALL.list[j].rad then
+						dist = BALL.list[i].rad;
+					else
+						dist = BALL.list[j].rad;
+					end
+				end
+				
 				local force = (
 					(BALL.G*BALL.list[i].mass*BALL.list[j].mass)
 					/

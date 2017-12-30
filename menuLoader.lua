@@ -10,8 +10,6 @@ function MENU.load(string)
 				obj[k] = load("return "..v)();
 			end
 		end
-		
-		print(_G[obj.type].new);
 		MENU.currentMenu[i] = _G[obj.type].new(obj.pos,obj.val,obj.varStr,obj.fntSCL,obj.title);
 	end
 end
@@ -28,7 +26,14 @@ end
 
 function MENU.update()
 	for i,obj in ipairs(MENU.currentMenu) do
-		print(obj.title);
 		obj:update();
+	end
+end
+
+function MENU.find(title)
+	for i,obj in ipairs(MENU.currentMenu) do
+		if obj.title == title then
+			return MENU.currentMenu[i];
+		end
 	end
 end

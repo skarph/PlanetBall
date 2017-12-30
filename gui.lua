@@ -161,7 +161,7 @@ TOGGLE.__index = TOGGLE
 		self.title = title;
 		self.lock = false;
 		self.label = self.title
-	
+		self.scale = scale;
 		self.held = false; --boolean on whether or not the button is being held
 		setmetatable(self,TOGGLE);
 	
@@ -230,20 +230,20 @@ BUTTON.__index = BUTTON
 		
 		self.textScale = scale;
 		self.func = func;
-		self.scale = scale or {1,10};
+		self.scale = scale;
 		self.title = title;
 		self.lock = false;
 		self.label = self.title
 	
 		self.held = false; --boolean on whether or not the button is being held
-		setmetatable(self,TOGGLE);
+		setmetatable(self,BUTTON);
 	
 		self.label = self.title;
 		return self;
 	end
 
 	function BUTTON.render(self)
-		if not self.parentTable[self.varIndex] then
+		if not self.held then
 			love.graphics.rectangle("line",self.x1,self.y1,self.x2,self.y2);
 			love.graphics.print(self.label,self.x1,self.y1,0,self.scale[1],self.scale[2]);
 		else
@@ -256,7 +256,7 @@ BUTTON.__index = BUTTON
 	end
 	
 	function BUTTON.update(self)
-		self.label = self.title.."; "..tostring(self.parentTable[self.varIndex]);
+		self.label = self.title;
 	
 		if not love.mouse.isDown(1) then
 			self.held = false;

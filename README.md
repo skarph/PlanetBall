@@ -1,5 +1,5 @@
 # Planet Ball 
-## Version 0.0.4 ALPHA
+## Version 0.1.0 BETA
 ### *A planetary golf-like game built on LÖVE 0.10.2*
 
 Comments in the code attempt to explain any functions. Contact for clarification/updating comments.
@@ -18,15 +18,17 @@ When menus are introduced, the game will oficially go into beta! exciting stuff!
 - [x] Gravity
 - [x] Levels
 - [ ] Level select
-- [ ] Menus :exclamation:
+- [ ] Level Designer
+- [x] Menus
+- [ ] More Content :exclamation:
+- [ ] Songs :exclemation:
+- [ ] Some good design
 ##### SLIGHTLY LESS IMPORTANT TODO:
-- [ ] graphics
+- [x] graphics
 - [x] Rudimentary GUI
-
-##### LONG TERM GOALS:
-* Make game visually appealing
-* Level Designer [?]
-
+- [x] Fix screen burn
+- [ ] Touch up ball makeup, maybe add an outline
+- [ ] Powerups?
 #### SPECIFICS:
 Balls have their own:
 * Color
@@ -38,6 +40,7 @@ Balls have their own:
 	
 A player can create an invisible 'ball' upon interaction with the game.
 It has no color, velocity, acceleration, or radius, and has a constant mass; This is to encourage planning of the use of one's clicking.
+Think of it like an interactor, balls come towards your mouse
 	
 Powerups [Ideas]:
 * Mass-of-Click upgrade/downgrade	
@@ -56,4 +59,10 @@ Powerups [Ideas]:
 
 0.0.3: Added rudimentary GUI, added pause function, fixed combining, made trails better.
 
-0.0.4: Added levels and json support for levels, added asset handler
+0.0.4: Added levels and JSON support for levels, added asset handler
+
+0.1.0 Fixed and added JSON support for menus, buttons now execute functions.
+	  Also fixed screen burn issue with balls, they now fade appropriately
+	  Fixed Phenonmenom where ball would rocket to high speeds when mouse clicked inside it
+	  Made collesion detection slightly smoother
+	  Offically in BETA :D (Shouldn't be long, just have to cobble together assets)

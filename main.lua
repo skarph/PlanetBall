@@ -48,23 +48,28 @@ function love.update(dt)
 end
 
 function love.draw()
-	
 	love.graphics.setCanvas(canvas);
+
+	love.graphics.setBlendMode("subtract", "alphamultiply");
+	love.graphics.setColor(0xFF,0xFF,0xFF,0x01);
+	love.graphics.rectangle('fill',0,0,winW,winH);
+	
+	love.graphics.setBlendMode("alpha", "alphamultiply");
 	
 	for i=1, BALL.lastIndex do
 		err,msg = pcall(BALL.draw,BALL.list[i]);--incase BALL[i]==nil
 	end
-		
+
 	love.graphics.setColor(255,255,255,255);
 	
 	love.graphics.setCanvas();
 	
-	love.graphics.setColor(0x00,0x00,0x00,0x1F);
-	love.graphics.rectangle('fill',0,0,winW,winH);
-	love.graphics.setBlendMode("alpha", "alphamultiply");
-	love.graphics.setColor(0xFF,0xFF,0xFF,0x0F);
-	love.graphics.draw(canvas);
+	love.graphics.setBlendMode("alpha", "premultiplied");
 	love.graphics.setColor(0xFF,0xFF,0xFF,0xFF);
+	love.graphics.draw(canvas);
+
+	love.graphics.setColor(0xFF,0xFF,0x1F,0xFF);
+	love.graphics.setBlendMode("alpha", "alphamultiply");
 	MENU.render();
 	
 	for i=1, BALL.lastIndex do
@@ -78,7 +83,8 @@ end
 function love.keypressed( key, scancode, isrepeat ) --update toggle
 	
 	if key == "space" and not isrepeat then
-		toggle.value = not toggle.value; --toggle toggle value
+		doUpdate = not doUpdate
+		
 	end
 	
 end
