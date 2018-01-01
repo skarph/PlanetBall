@@ -22,26 +22,25 @@ function love.load()
 	
 	LEVEL.load(ASSET.levels.circle);--loads the example level (example.json)
 	MENU.load(ASSET.menus.alphaMenu);
-	
+	----
 	doUpdate = false; --do updates for balls
-	love.keyboard.setKeyRepeat(false);
+	camMoving = false;
+	love.keyboard.setKeyRepeat(true);
 
 	timeMult = 1;
 	touchMass = 500; --mass of invisible ball spawned upon click
-	love.graphics.setCanvas(canvas);
-	
+	----	
 end
  
 function love.update(dt)
-	
 	dtime = dt * timeMult --time delta used for updating balls
 	MENU.update();
 	if doUpdate then
 		GTIME = GTIME + dtime; --update global timer
 		local xC,yC;
 		if love.mouse.isDown(1) then
-			xC = love.mouse.getX();
-			yC = love.mouse.getY();
+			xC = (love.mouse.getX() / BALL.ballScale) - BALL.ballCenter[1];
+			yC = (love.mouse.getY() / BALL.ballScale) - BALL.ballCenter[2];
 		end
 		update(dtime,xC,yC);
 	end
@@ -51,17 +50,18 @@ function love.draw()
 	love.graphics.setCanvas(canvas);
 
 	love.graphics.setBlendMode("subtract", "alphamultiply");
-	love.graphics.setColor(0xFF,0xFF,0xFF,0x01);
+	love.graphics.setColor(0x7F,0x7F,0x7F,0x02);
 	love.graphics.rectangle('fill',0,0,winW,winH);
 	
 	love.graphics.setBlendMode("alpha", "alphamultiply");
 	
-	for i=1, BALL.lastIndex do
-		err,msg = pcall(BALL.draw,BALL.list[i]);--incase BALL[i]==nil
+	if doUpdate then
+		for i=1, BALL.lastIndex do
+			err,msg = pcall(BALL.draw,BALL.list[i]);--incase BALL[i]==nil
+		end
 	end
 
 	love.graphics.setColor(255,255,255,255);
-	
 	love.graphics.setCanvas();
 	
 	love.graphics.setBlendMode("alpha", "premultiplied");
@@ -73,9 +73,9 @@ function love.draw()
 	MENU.render();
 	
 	for i=1, BALL.lastIndex do
-		pcall(BALL.draw,BALL.list[i]);--incase BALL[i]==nil
+		err,msg = pcall(BALL.draw,BALL.list[i]);--incase BALL[i]==nil
 	end
-	
+	love.graphics.setColor(0xFF,0xFF,0x1F,0xFF);
 	love.graphics.print(GTIME,0,0);
 	
 end
@@ -87,6 +87,29 @@ function love.keypressed( key, scancode, isrepeat ) --update toggle
 		
 	end
 	
+	if key == "up" then
+		BALL.ballCenter[2] = BALL.ballCenter[2] - 5;
+		camMoving = true;
+	elseif key == "down" then
+		BALL.ballCenter[2] = BALL.ballCenter[2] + 5;
+		camMoving = true;
+	end
+	
+	if key == "right" then
+		BALL.ballCenter[1] = BALL.ballCenter[1] + 5;
+	elseif key == "left" then
+		BALL.ballCenter[1] = BALL.ballCenter[1] - 5;
+		camMoving = true;
+	end
+
+
+	if key == "=" then
+		BALL.ballScale = BALL.ballScale + 0.01;
+		camMoving = true;
+	elseif key == "-" then
+		BALL.ballScale = BALL.ballScale - 0.01;
+		camMoving = true;
+	end
 end
 
 function update(dtime,xC,yC)
@@ -106,9 +129,5 @@ function update(dtime,xC,yC)
 			BALL.list[i]:update(dtime);
 		end
 	end
-	
-end
-
-function shortJSON(str)
 	
 end

@@ -7,7 +7,7 @@ function LEVEL.load(string)
 	local data = JSON.decode(string);-->> creates a new ball relative to center with the provided json string
 	
 	for i,v in ipairs(data) do
-		n = BALL.new(data[i].pos.x+(winW/2),data[i].pos.y+(winH/2),
+		n = BALL.new(data[i].pos.x,data[i].pos.y,
 		data[i].rad,data[i].mass,
 		{data[i].color[1],data[i].color[2],data[i].color[3],data[i].color[4]}
 		,data[i].lock);
