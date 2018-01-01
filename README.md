@@ -68,3 +68,4 @@ Powerups [Ideas]:
 	  Offically in BETA :D (Shouldn't be long, just have to cobble together assets)
 	  
 0.1.1 Added Rudementary Camera, fixed screen burning phenomenom
+ |a: fixed compatibility with windows
