@@ -14,6 +14,7 @@ function love.load()
 	require("assetHandler");
 	require("levelLoader");
 	require("menuLoader");
+  require("playerinterface");
 	ASSET.load();--loads all assets
 	
 	love.graphics.setFont(ASSET.fonts.JosefinSans.BoldItalic);--sets font. All assets are acessed through the assets folder and its subdirectories
@@ -24,7 +25,6 @@ function love.load()
 	MENU.load(ASSET.menus.alphaMenu);
 	----
 	doUpdate = false; --do updates for balls
-	camMoving = false;
 	love.keyboard.setKeyRepeat(true);
 
 	timeMult = 1;
@@ -38,11 +38,12 @@ function love.update(dt)
 	if doUpdate then
 		GTIME = GTIME + dtime; --update global timer
 		local xC,yC;
-		if love.mouse.isDown(1) then
-			xC = (love.mouse.getX() / BALL.ballScale) - BALL.ballCenter[1];
-			yC = (love.mouse.getY() / BALL.ballScale) - BALL.ballCenter[2];
+    local touch = PINTER.getInteractions()[1];
+    if(touch) then
+      xC = (touch.x - BALL.ballCenter[1]) / BALL.ballScale ;
+      yC = (touch.y - BALL.ballCenter[2]) / BALL.ballScale ;
 		end
-		update(dtime,xC,yC);
+    update(dtime,xC,yC);
 	end
 end
 
@@ -84,31 +85,25 @@ function love.keypressed( key, scancode, isrepeat ) --update toggle
 	
 	if key == "space" and not isrepeat then
 		doUpdate = not doUpdate
-		
 	end
 	
 	if key == "up" then
 		BALL.ballCenter[2] = BALL.ballCenter[2] - 5;
-		camMoving = true;
 	elseif key == "down" then
 		BALL.ballCenter[2] = BALL.ballCenter[2] + 5;
-		camMoving = true;
 	end
 	
 	if key == "right" then
 		BALL.ballCenter[1] = BALL.ballCenter[1] + 5;
-	elseif key == "left" then
+  elseif key=="left" then
 		BALL.ballCenter[1] = BALL.ballCenter[1] - 5;
-		camMoving = true;
 	end
 
 
 	if key == "=" then
 		BALL.ballScale = BALL.ballScale + 0.01;
-		camMoving = true;
 	elseif key == "-" then
 		BALL.ballScale = BALL.ballScale - 0.01;
-		camMoving = true;
 	end
 end
 

@@ -133,7 +133,7 @@ end
 
 function BALL.draw(self,disp,scale)-->>call for painting ball
 	local mR,mG,mB,mA = love.graphics.getColor();--remember old colors
-	local disp = disp or {BALL.ballCenter[1]*BALL.ballScale , BALL.ballCenter[2]*BALL.ballScale}
+	local disp = disp or {BALL.ballCenter[1] , BALL.ballCenter[2]}
 	local scale = scale or BALL.ballScale;
 	love.graphics.setColor(self.color);
 	love.graphics.circle('fill',(self.pos[1]*scale) + disp[1],(self.pos[2]*scale) + disp[2],self.rad*scale);--draw self *shrug*
