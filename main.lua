@@ -6,15 +6,14 @@ function love.load()
 	canvas = love.graphics.newCanvas(winW,winH);
 	love.graphics.setCanvas(canvas);
 	love.graphics.setBlendMode("alpha", "alphamultiply");
-	
+	require("vectorConstruct");
 	JSON = require("json");	
 	require("ball");
-	require("vectorConstruct");
 	require("gui");
 	require("assetHandler");
 	require("levelLoader");
 	require("menuLoader");
-  require("playerinterface");
+  	require("playerInterface");
 	ASSET.load();--loads all assets
 	
 	love.graphics.setFont(ASSET.fonts.JosefinSans.BoldItalic);--sets font. All assets are acessed through the assets folder and its subdirectories
@@ -33,18 +32,16 @@ function love.load()
 end
  
 function love.update(dt)
+	BALL.approachBallCenter(dt)
 	dtime = dt * timeMult --time delta used for updating balls
+	PINTER.coolTime = PINTER.coolTime - 1
 	MENU.update();
 	if doUpdate then
 		GTIME = GTIME + dtime; --update global timer
-		local xC,yC;
-    local touch = PINTER.getInteractions()[1];
-    if(touch) then
-      xC = (touch.x - BALL.ballCenter[1]) / BALL.ballScale ;
-      yC = (touch.y - BALL.ballCenter[2]) / BALL.ballScale ;
-		end
-    update(dtime,xC,yC);
+    	update(-0.01,PINTER.getInteractions());
 	end
+	
+	PINTER.doKeyJobs();
 end
 
 function love.draw()
@@ -81,42 +78,31 @@ function love.draw()
 	
 end
 
-function love.keypressed( key, scancode, isrepeat ) --update toggle
-	
-	if key == "space" and not isrepeat then
-		doUpdate = not doUpdate
-	end
-	
-	if key == "up" then
-		BALL.ballCenter[2] = BALL.ballCenter[2] - 5;
-	elseif key == "down" then
-		BALL.ballCenter[2] = BALL.ballCenter[2] + 5;
-	end
-	
-	if key == "right" then
-		BALL.ballCenter[1] = BALL.ballCenter[1] + 5;
-  elseif key=="left" then
-		BALL.ballCenter[1] = BALL.ballCenter[1] - 5;
-	end
-
-
-	if key == "=" then
-		BALL.ballScale = BALL.ballScale + 0.01;
-	elseif key == "-" then
-		BALL.ballScale = BALL.ballScale - 0.01;
+function love.keyreleased( key )
+	if(PINTER.getKeyAssignment(key)) then
+		PINTER.getKeyAssignment(key).callback(false,true,love.keyboard.isDown(key));
 	end
 end
 
-function update(dtime,xC,yC)
-	
-	local touch;--variable holding index for touch ball
-	if xC and yC then --creates an intangible ball for other balls to gravitate to
-		touch = BALL.new(xC,yC,1,touchMass);
+function love.keypressed( key, scancode, isrepeat ) --update toggle
+	if(PINTER.getKeyAssignment(key)) then
+		PINTER.getKeyAssignment(key).callback(true,false,love.keyboard.isDown(key));
+	end
+end
+
+function update(dtime,touches)
+	local touchBalls = {};--variable holding indecies for the gravity points
+	for k,v in ipairs(touches) do
+		local xC = (touches[k][1] - BALL.ballCenter[1]) / BALL.ballScale ;
+      	local yC = (touches[k][2]- BALL.ballCenter[2]) / BALL.ballScale ;
+		touchBalls[k] = BALL.new(xC,yC,1,touchMass);
 	end
 	BALL.grav(); --solve gravity
-	if touch then
-		BALL.list[touch] = nil;
+	
+	for k,v in ipairs(touches) do
+		BALL.list[touchBalls[k]] = nil;
 	end
+	
 	BALL.doCollisions(); --solve any collisions
 	
 	for i=1, BALL.lastIndex do --updating solved per ball. May be useful when deciding to 'speed up' some balls.
@@ -124,5 +110,4 @@ function update(dtime,xC,yC)
 			BALL.list[i]:update(dtime);
 		end
 	end
-	
 end

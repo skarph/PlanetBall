@@ -5,21 +5,11 @@ SLIDER.__index = SLIDER;
 	function SLIDER.new(dim,range,varStr,scale,title)
 		local self = {};
 
-		if dim[1] > dim[3] then
-			self.x2 = dim[1]
-			self.x1 = dim[3]
-		else
-			self.x1 = dim[1]
-			self.x2 = dim[3]
-		end
+		self.x1 = dim[1];
+		self.x2 = dim[3];
 	
-		if dim[2] > dim[4] then
-			self.y2 = dim[2];
-			self.y1 = dim[4];
-		else
-			self.y1 = dim[2];
-			self.y2 = dim[4];
-		end
+		self.y1 = dim[2];
+		self.y2 = dim[4];
 		
 		local parentTab = _G;
 		local lastIndex = 0;
@@ -80,15 +70,18 @@ SLIDER.__index = SLIDER;
 	
 		if self.lock then return; end
 		
-		if not love.mouse.isDown(1) then return; end
-		local inbounds = 
-			self.x1<=love.mouse.getX() and
-			self.y1<=love.mouse.getY() and
-			self.x2>=love.mouse.getX() and
-			self.y2>=love.mouse.getY();
+		local acts = PINTER.getInteractions();
+		if not acts[1] then return; end
+		local inbounds;
+		for k,v in ipairs(acts) do
+			if(self.x1<=acts[k][1] and self.y1<=acts[k][2] and self.x2>=acts[k][1] and self.y2>=acts[k][2]) then
+				inbounds = k;
+			end
+		end
+	
 		if not inbounds then return; end
 		
-		self.slideX =  love.mouse.getX()
+		self.slideX = acts[inbounds][1];
 		
 		if self.slideX<self.x1 then
 			self.slideX = self.x1;
@@ -111,21 +104,11 @@ TOGGLE.__index = TOGGLE
 	function TOGGLE.new(dim,value,varStr,scale,title)
 		local self = {};
 		
-		if dim[1] > dim[3] then
-			self.x2 = dim[1]
-			self.x1 = dim[3]
-		else
-			self.x1 = dim[1]
-			self.x2 = dim[3]
-		end
+		self.x1 = dim[1];
+		self.x2 = dim[3];
 	
-		if dim[2] > dim[4] then
-			self.y2 = dim[2];
-			self.y1 = dim[4];
-		else
-			self.y1 = dim[2];
-			self.y2 = dim[4];
-		end
+		self.y1 = dim[2];
+		self.y2 = dim[4];
 	
 		local parentTab = _G;
 		local lastIndex = 0;
@@ -184,19 +167,21 @@ TOGGLE.__index = TOGGLE
 	
 	function TOGGLE.update(self)
 		self.label = self.title.."; "..tostring(self.parentTable[self.varIndex]);
-	
-		if not love.mouse.isDown(1) then
+		local acts = PINTER.getInteractions();
+		if not acts[1] then
 			self.held = false;
 			return;
 		end
 	
 		if self.lock or self.held then return; end	
 		
-		local inbounds = 
-			self.x1<=love.mouse.getX() and
-			self.y1<=love.mouse.getY() and
-			self.x2>=love.mouse.getX() and
-			self.y2>=love.mouse.getY();
+		if not acts[1] then return; end
+		local inbounds;
+		for k,v in ipairs(acts) do
+			if(self.x1<=acts[k][1] and self.y1<=acts[k][2] and (self.x2+self.x1)>=acts[k][1] and (self.y2+self.y1)>=acts[k][2]) then
+				inbounds = k;
+			end
+		end
 		
 		if not inbounds then return; end
 		
@@ -211,22 +196,11 @@ BUTTON.__index = BUTTON
 	
 	function BUTTON.new(dim,func,varStr,scale,title)
 		self = {};
+		self.x1 = dim[1];
+		self.x2 = dim[3];
 	
-		if dim[1] > dim[3] then
-			self.x2 = dim[1]
-			self.x1 = dim[3]
-		else
-			self.x1 = dim[1]
-			self.x2 = dim[3]
-		end
-	
-		if dim[2] > dim[4] then
-			self.y2 = dim[2];
-			self.y1 = dim[4];
-		else
-			self.y1 = dim[2];
-			self.y2 = dim[4];
-		end
+		self.y1 = dim[2];
+		self.y2 = dim[4];
 		
 		self.textScale = scale;
 		self.func = func;
@@ -257,24 +231,27 @@ BUTTON.__index = BUTTON
 	
 	function BUTTON.update(self)
 		self.label = self.title;
-	
-		if not love.mouse.isDown(1) then
+		local acts = PINTER.getInteractions();
+		if not acts[1] then
 			self.held = false;
 			return;
 		end
 	
-		if self.lock or self.held then return; end	
+		if self.lock then return; end	
 		
-		local inbounds = 
-			self.x1<=love.mouse.getX() and
-			self.y1<=love.mouse.getY() and
-			self.x2>=love.mouse.getX() and
-			self.y2>=love.mouse.getY();
+		local acts = PINTER.getInteractions();
+		if not acts[1] then return; end
+		local inbounds;
+		for k,v in ipairs(acts) do
+			if(self.x1<=acts[k][1] and self.y1<=acts[k][2] and (self.x2+self.x1)>=acts[k][1] and (self.y2+self.y1)>=acts[k][2]) then
+				inbounds = k;
+			end
+		end
 		
 		if not inbounds then return; end
 		
+		self.func(self.held);
 		self.held = true;
-		self.func();
 	end
 
 -------------------------------------------------------------------------------------

@@ -9,8 +9,20 @@ BALL.G = 5 -->>Gravititational constant
 
 BALL.ballScale = 1; --multiplyer for radius when drawing
 
-BALL.ballCenter = {winW/2,winH/2}; --onscreen coords corresponding to 0,0 in game
-
+BALL.ballCenter = V.vectorize{winW/2,winH/2}; --onscreen coords corresponding to 0,0 in game
+BALL.cenTar = BALL.ballCenter; --centaurs (center target)
+BALL.cenSpe = 500;
+BALL.superJumpDist = 0.5;
+function BALL.approachBallCenter(tick)
+	local jumpDist = tick*BALL.cenSpe;
+	if BALL.ballCenter:distTo(BALL.cenTar) < BALL.cenSpe then
+		jumpDist = BALL.cenSpe*tick*(BALL.ballCenter:distTo(BALL.cenTar)/BALL.cenSpe);
+	end
+	if BALL.ballCenter:distTo(BALL.cenTar) < BALL.superJumpDist then
+		BALL.ballCenter = BALL.cenTar;	
+	end
+	BALL.ballCenter = BALL.ballCenter + (jumpDist * (BALL.cenTar - BALL.ballCenter):norm());
+end
 
 function BALL.new(x,y,rad,mass,color,lock) -->> creates a new ball object, stores object in BALL.list, returns id of ball
 	local self = {};
@@ -29,7 +41,7 @@ function BALL.new(x,y,rad,mass,color,lock) -->> creates a new ball object, store
 	self.vel = V.vectorize({0,0});--units/sec
 	self.acc = V.vectorize({0,0}); --units/sec^2
 	self.spin = 0;--quantum unit, jk, not used as of now
-	self.colCheck = {}--collision check litt
+	self.colCheck = {}--collision check littwhat was actually said. Strawman. Can lead to wrong concwhat was actually said. Strawman. Can lead to wrong conclusionslusions
 	self.hasCol = {};--post-solve list
 	self.iFrames = 0;--time where colls don't count
 	self.lock = lock --whether or not ball is static

@@ -95,7 +95,11 @@ function V.__eq(op1,op2)
 	return true;
 end
 function V.norm(self)-->>normalize vector
-	return (self/self:getMagnitude());--sad.
+	local magnitude = self:getMagnitude();
+	if magnitude == 0 then
+		return V.vectorize({0,0});
+	end
+	return (self/magnitude);--sad.
 end
 
 function V.getMagnitude(self)
@@ -105,4 +109,18 @@ function V.getMagnitude(self)
 	end
 	magnitude = math.sqrt(magnitude); --take root, dist. formula
 	return magnitude;
+end
+
+function V.distTo(op1,op2)
+	if not(getmetatable(op1)==getmetatable(op2)) then error("Both tables must be vector-formated! [V.vectorize("..tostring(op1)..")]"); end;
+	if not(op1.DIMCOUNT==op2.DIMCOUNT) then return nil; end;
+	local dist = 0;
+	if(op1.DIMCOUNT==1) then
+		return V.vectorize{math.abs(op1[1]-op2[2])};
+	end
+	for i=1, op1.DIMCOUNT do
+		dist = dist + (math.abs(math.pow(op1[i]-op2[i],2)));
+	end
+	dist = math.sqrt(dist);
+	return dist;
 end

@@ -8,7 +8,7 @@
 	},
 	
 	{"type"    : "TOGGLE",
-	 "pos"     : "{winW - 100,winH  - 100,winW,winH}",
+	 "pos"     : "{winW - 100,winH  - 100,100,100}",
 	 "val"     : true,
 	 "varStr"  : "doUpdate",
 	 "title"   : "Moving",
@@ -16,10 +16,26 @@
 	},
 	
 	{"type"    : "BUTTON",
-	 "pos"     : "{winW - 100,0,winW,100}",
-	 "val"     : "function() local first = nil; local found = false; for k,v in pairs(ASSET.levels) do if not first then first = v; end if found then LEVEL.unload(); LEVEL.load(v); love.graphics.clear(); return; end if v==LEVEL.currentLevel then found = true; end end LEVEL.unload(); LEVEL.load(first); love.graphics.clear(); end",
+	 "pos"     : "{winW - 100,0,100,100}",
+	 "val"     : "function(held) if held then return; end local first = nil; local found = false; for k,v in pairs(ASSET.levels) do if not first then first = v; end if found then LEVEL.unload(); LEVEL.load(v); love.graphics.clear(); return; end if v==LEVEL.currentLevel then found = true; end end LEVEL.unload(); LEVEL.load(first); love.graphics.clear(); end",
 	 "varStr"  : null,
 	 "title"   : "Level\nCycle",
 	 "fntSCL"  : "{nil,nil}"
+	},
+	
+	{"type"    : "BUTTON",
+	 "pos"     : "{winW - 100,200,100,100}",
+	 "val"     : "function(held) BALL.ballScale = BALL.ballScale + 0.01; end",
+	 "varStr"  : null,
+	 "title"   : "+",
+	 "fntSCL"  : "{5,5}"
+	},
+	
+	{"type"    : "BUTTON",
+	 "pos"     : "{winW - 100,300,100,100}",
+	 "val"     : "function(held) BALL.ballScale = BALL.ballScale - 0.01; end",
+	 "varStr"  : null,
+	 "title"   : "-",
+	 "fntSCL"  : "{5,5}"
 	}
 ]
