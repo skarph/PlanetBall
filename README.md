@@ -40,26 +40,41 @@ Think of it like an interactor, balls come towards your mouse
 
 0.0.0: initial collision/physics work, never released
 
+
 0.0.1: removed spin mechanic, fixed collisions crashing game; code cleaning
+
 
 0.0.2: fixed bug where gravity did not properly attract; code cleaning
 
 |a: fixed other gravity bug
 
+
 0.0.3: Added rudimentary GUI, added pause function, fixed combining, made trails better.
+
 
 0.0.4: Added levels and JSON support for levels, added asset handler
 
-0.1.0 Fixed and added JSON support for menus, buttons now execute functions.
-	  Also fixed screen burn issue with balls, they now fade appropriately
-	  Fixed Phenonmenom where ball would rocket to high speeds when mouse clicked inside it
-	  Made collesion detection slightly smoother
-	  Offically in BETA :D (Shouldn't be long, just have to cobble together assets)
+
+0.1.0: Fixed and added JSON support for menus, buttons now execute functions.
 	  
-0.1.1 Added Rudementary Camera, fixed screen burning phenomenom
- |a: fixed compatibility with windows
+	  Also fixed screen burn issue with balls, they now fade appropriately
+	  
+	  Fixed Phenonmenom where ball would rocket to high speeds when mouse clicked inside it
+	  
+	  Made collesion detection slightly smoother
+	  
+	  Offically in BETA :D (Shouldn't be long, just have to cobble together assets)
+
+
+0.1.1: Added Rudementary Camera, fixed screen burning phenomenom
  
-0.2.0 Finished the Camera
+ |a: fixed compatibility with windows
+
+
+0.2.0: Finished the Camera
+	  
 	  Added touch control.
+	  
 	  Improved UI.
+	  
 	  Added a function to get absolute distance between two vector-valued tables
