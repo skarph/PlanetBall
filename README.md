@@ -6,7 +6,7 @@ Comments in the code attempt to explain any functions. Contact for clarification
 
 #### OVERVIEW:
 A golf game. A player must combine all 'balls' on screen in order to win.
-Balls are naturally attracted to eachother, and may start orbits around eachother.
+Balls are naturally attracted to each other, and may start orbits around each other.
 Players can click/touch on the screen to create gravity wells to which the balls are attracted to.
 Lower time spent using/creating these wells will result in a higher score.
 
@@ -33,7 +33,7 @@ Lower time spent using/creating these wells will result in a higher score.
 * -/+                : Zoom the Camera
 * Space Bar          : Pause/Unpause the simulation
 ###### In-Game Buttons
-* Gravity Slider     : Adjust the Gravitational Constant-- negative values repell!
+* Gravity Slider     : Adjust the Gravitational Constant-- negative values repel!
 * Level Cycle        : Cycle through playing one of the two levels
 * Moving             : Pause/Unpause the simulation
 * -/+                : Zoom the Camera
@@ -61,14 +61,14 @@ Lower time spent using/creating these wells will result in a higher score.
 	  
 	  Also fixed screen burn issue with balls, they now fade appropriately
 	  
-	  Fixed Phenonmenom where ball would rocket to high speeds when mouse clicked inside it
+	  Fixed Phenomenon where ball would rocket to high speeds when mouse clicked inside it
 	  
-	  Made collesion detection slightly smoother
+	  Made collision detection slightly smoother
 	  
-	  Offically in BETA :D (Shouldn't be long, just have to cobble together assets)
+	  Officially in BETA :D (Shouldn't be long, just have to cobble together assets)
 
 
-0.1.1: Added Rudementary Camera, fixed screen burning phenomenom
+0.1.1: Added Rudimentary Camera, fixed screen burning phenomenon
  
  |a: fixed compatibility with windows
 
