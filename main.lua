@@ -1,7 +1,7 @@
 GTIME = 0; --global timer
 
 function love.load()
-	love.window.setMode(1400,1000);
+	love.window.setMode(1040,780);
 	winW , winH = love.graphics.getDimensions();
 	canvas = love.graphics.newCanvas(winW,winH);
 	love.graphics.setCanvas(canvas);
