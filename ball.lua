@@ -24,7 +24,7 @@ function BALL.approachBallCenter(tick)
 	BALL.ballCenter = BALL.ballCenter + (jumpDist * (BALL.cenTar - BALL.ballCenter):norm());
 end
 
-function BALL.new(x,y,rad,mass,color,lock) -->> creates a new ball object, stores object in BALL.list, returns id of ball
+function BALL.new(x,y,rad,mass,color,lock,img,quad) -->> creates a new ball object, stores object in BALL.list, returns id of ball
 	local self = {};
 	if color then
 		if not color[1] then
@@ -44,7 +44,15 @@ function BALL.new(x,y,rad,mass,color,lock) -->> creates a new ball object, store
 	self.colCheck = {}--collision check littwhat was actually said. Strawman. Can lead to wrong concwhat was actually said. Strawman. Can lead to wrong conclusionslusions
 	self.hasCol = {};--post-solve list
 	self.iFrames = 0;--time where colls don't count
-	self.lock = lock --whether or not ball is static
+	self.lock = lock; --whether or not ball is static
+	if not(rad==0) then
+		self.img = img; --image the ball draws from
+		self.quad = quad; --quad the ball uses to draw the image
+		if not quad then
+			local rand = (math.floor(math.random()*4)); --random 0 to 3. temporary randomizer
+			self.quad = love.graphics.newQuad(0,self.img:getHeight()*rand*0.25,self.img:getWidth(),self.img:getHeight()*0.25,self.img:getDimensions()) 
+		end
+	end
 	BALL.list[self.id] = self;
 	return self.id;
 end
@@ -144,6 +152,15 @@ function BALL.eat(ball1,ball2)-->>adds all of the properties of the greater radi
 end
 
 function BALL.draw(self,disp,scale)-->>call for painting ball
+	local mR,mG,mB,mA = love.graphics.getColor();--remember old colors
+	local disp = disp or {BALL.ballCenter[1] , BALL.ballCenter[2]};
+	local scale = scale or BALL.ballScale;
+	love.graphics.setColor(self.color);
+	love.graphics.draw(self.img,self.quad,((self.pos[1]- self.rad)*scale) + disp[1] ,((self.pos[2]- self.rad)*scale) + disp[2],nil,self.rad*scale*2/self.img:getWidth());
+	love.graphics.setColor(mR,mG,mB,mA);--reapply old colors
+end
+
+function BALL.drawTrail(self,disp,scale)
 	local mR,mG,mB,mA = love.graphics.getColor();--remember old colors
 	local disp = disp or {BALL.ballCenter[1] , BALL.ballCenter[2]}
 	local scale = scale or BALL.ballScale;

@@ -2,14 +2,14 @@
 SLIDER = {}
 SLIDER.__index = SLIDER;
 	
-	function SLIDER.new(dim,range,varStr,scale,title)
+	function SLIDER.new(dim,range,varStr,font,scale,title,img,quads)
 		local self = {};
 
 		self.x1 = dim[1];
-		self.x2 = dim[3];
+		self.dX = dim[3];
 	
 		self.y1 = dim[2];
-		self.y2 = dim[4];
+		self.dY = dim[4];
 		
 		local parentTab = _G;
 		local lastIndex = 0;
@@ -47,11 +47,20 @@ SLIDER.__index = SLIDER;
 		self.slideMax = range[2] or 10;
 		self.parentTable[self.varIndex] = range[3] or self.parentTable[self.varIndex]; 
 		self.slideX = self.x1; --slider circle thingy
-		self.slideY = (self.y1+self.y2)/2;
+		self.slideY = (self.y1+self.dY)*0.5;
 	
 		self.title = title; --used to display value along with value
 		self.lock = false; --if true, value canno be changed
 		self.label = self.title -- display value
+		self.font= font or love.graphics.getFont() or love.graphics.getFont();
+		self.img = img;
+		self.quads = quads or {
+			love.graphics.newQuad(0,0,self.img:getWidth(),self.img:getHeight()*0.25,self.img:getDimensions()),
+			love.graphics.newQuad(0,self.img:getHeight()*0.25,self.img:getWidth(),self.img:getHeight()*0.25,self.img:getDimensions()),
+			love.graphics.newQuad(0,self.img:getHeight()*0.5,self.img:getWidth()*0.25,self.img:getHeight()*0.5,self.img:getDimensions()),
+			love.graphics.newQuad(self.img:getWidth()*0.75,self.img:getHeight()*0.5,self.img:getWidth()*0.25,self.img:getHeight()*0.5,self.img:getDimensions())
+			}
+		self.held = false;
 		setmetatable(self,SLIDER);
 		self:update(); --updates table
 		--renders tabl
@@ -59,41 +68,41 @@ SLIDER.__index = SLIDER;
 	end
 
 	function SLIDER.render(self)
-			love.graphics.print(self.label,self.x1,self.y1,0,self.textScale[1],self.textScale[2]);--prints label
-			love.graphics.line(self.x1,(self.y1+self.y2)/2,self.x2,(self.y1+self.y2)/2);--draws slide
-			love.graphics.circle("fill",self.slideX,self.slideY,3);--draws slider
+		local oldFont = love.graphics.getFont();
+		love.graphics.setFont(self.font);
+		
+		love.graphics.print(self.label,self.x1,self.y1,0,self.textScale[1],self.textScale[2]);--prints label
+	
+		if self.held then
+			love.graphics.draw(self.img,self.quads[1],self.x1,((self.y1+self.dY)*0.5)-(self.img:getWidth()*0.0625),nil,self.dX/self.img:getWidth(),1);
+			love.graphics.draw(self.img,self.quads[4],self.slideX-(self.img:getWidth()*0.0625),((self.y1+self.dY)*0.5)-(self.img:getWidth()*0.125));--draws slider	
+		
+		else
+			love.graphics.draw(self.img,self.quads[2],self.x1,((self.y1+self.dY)*0.5)-(self.img:getWidth()*0.0625),nil,self.dX/self.img:getWidth(),1);
+			love.graphics.draw(self.img,self.quads[3],self.slideX-(self.img:getWidth()*0.125),((self.y1+self.dY)*0.5)-(self.img:getWidth()*0.125));--draws slider
+		end
+		love.graphics.setFont(oldFont);
 	end
 
 	function SLIDER.update(self)
 		self.label = self.title.."; "..self.parentTable[self.varIndex]; --sets value initially so return; checks don't interrupt update
-		self.slideX = ( (self.parentTable[self.varIndex] - self.slideMin) * math.abs(self.x2-self.x1) ) / math.abs(self.slideMax-self.slideMin) + self.x1;
-	
+		self.slideX = (self.dX*((self.parentTable[self.varIndex]-self.slideMin)/(self.slideMax-self.slideMin)))+self.x1;
+		self.held = false;
 		if self.lock then return; end
 		
 		local acts = PINTER.getInteractions();
 		if not acts[1] then return; end
 		local inbounds;
 		for k,v in ipairs(acts) do
-			if(self.x1<=acts[k][1] and self.y1<=acts[k][2] and self.x2>=acts[k][1] and self.y2>=acts[k][2]) then
+			if(self.x1<=acts[k][1] and self.y1<=acts[k][2] and self.dX+self.x1>=acts[k][1] and self.dY+self.y1>=acts[k][2]) then
 				inbounds = k;
 			end
 		end
 	
 		if not inbounds then return; end
-		
+		self.held = true;
 		self.slideX = acts[inbounds][1];
-		
-		if self.slideX<self.x1 then
-			self.slideX = self.x1;
-		elseif self.slideX>self.x2 then
-			self.slideX = self.x2;
-		end
-		
-		self.parentTable[self.varIndex] = (( math.abs(self.slideMax-self.slideMin) / math.abs(self.x2-self.x1) ) * (self.slideX - self.x1) + self.slideMin); --sets value from position
-		
-		if self.parentTable[self.varIndex]>self.slideMax then
-			self.parentTable[self.varIndex] = self.slideMax; --caps out value
-		end
+		self.parentTable[self.varIndex] = (self.slideMax-self.slideMin)*((self.slideX-self.x1)/self.dX) + self.slideMin;
 	end
 ----------------------------------------------------------------------
 DISPLAY = {}
@@ -101,14 +110,14 @@ DISPLAY = {}
 TOGGLE = {}
 TOGGLE.__index = TOGGLE
 	
-	function TOGGLE.new(dim,value,varStr,scale,title)
+	function TOGGLE.new(dim,value,varStr,font,scale,title,img,quads)
 		local self = {};
 		
 		self.x1 = dim[1];
-		self.x2 = dim[3];
+		self.dX = dim[3];
 	
 		self.y1 = dim[2];
-		self.y2 = dim[4];
+		self.dY = dim[4];
 	
 		local parentTab = _G;
 		local lastIndex = 0;
@@ -139,7 +148,11 @@ TOGGLE.__index = TOGGLE
 	
 		self.parentTable = parentTab
 		self.varIndex = finalIndex;
-	
+		self.img = img;
+		self.quads = quads or {
+			love.graphics.newQuad(0,0,self.img:getWidth(),self.img:getHeight()*0.5,self.img:getDimensions()),
+			love.graphics.newQuad(0,self.img:getHeight()*0.5,self.img:getWidth(),self.img:getHeight()*0.5,self.img:getDimensions())
+			}
 		self.parentTable[self.varIndex] = value;
 		self.title = title;
 		self.lock = false;
@@ -147,22 +160,27 @@ TOGGLE.__index = TOGGLE
 		self.scale = scale;
 		self.held = false; --boolean on whether or not the button is being held
 		setmetatable(self,TOGGLE);
-	
+		self.font = font or love.graphics.getFont();
 		self.label = self.title.."; "..tostring(self.parentTable[self.varIndex]);
 		return self;
 	end
 
 	function TOGGLE.render(self)
+		local oldFont = love.graphics.getFont();
+		love.graphics.setFont(self.font);
+		
 		if not self.parentTable[self.varIndex] then
-			love.graphics.rectangle("line",self.x1,self.y1,self.x2,self.y2);
+			love.graphics.draw(self.img,self.quads[2],self.x1,self.y1,nil,self.dX/self.img:getWidth(),self.dY/(self.img:getHeight()*0.5));
 			love.graphics.print(self.label,self.x1,self.y1,0,self.scale[1],self.scale[2]);
 		else
-			love.graphics.rectangle("fill",self.x1,self.y1,self.x2,self.y2);
+			love.graphics.draw(self.img,self.quads[1],self.x1,self.y1,nil,self.dX/self.img:getWidth(),self.dY/(self.img:getHeight()*0.5));
 			local oldC = {love.graphics.getColor()};
 			love.graphics.setColor(255-oldC[1],255-oldC[2],255-oldC[3],oldC[4]);
 			love.graphics.print(self.label,self.x1,self.y1,0,self.scale[1],self.scale[2]);
 			love.graphics.setColor(oldC);
 		end
+	
+		love.graphics.setFont(oldFont);
 	end
 	
 	function TOGGLE.update(self)
@@ -178,7 +196,7 @@ TOGGLE.__index = TOGGLE
 		if not acts[1] then return; end
 		local inbounds;
 		for k,v in ipairs(acts) do
-			if(self.x1<=acts[k][1] and self.y1<=acts[k][2] and (self.x2+self.x1)>=acts[k][1] and (self.y2+self.y1)>=acts[k][2]) then
+			if(self.x1<=acts[k][1] and self.y1<=acts[k][2] and (self.dX+self.x1)>=acts[k][1] and (self.dY+self.y1)>=acts[k][2]) then
 				inbounds = k;
 			end
 		end
@@ -194,13 +212,13 @@ TOGGLE.__index = TOGGLE
 BUTTON = {}
 BUTTON.__index = BUTTON
 	
-	function BUTTON.new(dim,func,varStr,scale,title)
+	function BUTTON.new(dim,func,varStr,font,scale,title,img,quads)
 		self = {};
 		self.x1 = dim[1];
-		self.x2 = dim[3];
+		self.dX = dim[3];
 	
 		self.y1 = dim[2];
-		self.y2 = dim[4];
+		self.dY = dim[4];
 		
 		self.textScale = scale;
 		self.func = func;
@@ -211,22 +229,32 @@ BUTTON.__index = BUTTON
 	
 		self.held = false; --boolean on whether or not the button is being held
 		setmetatable(self,BUTTON);
-	
+		
 		self.label = self.title;
+		
+		self.img = img;
+		self.quads = quads or {
+			love.graphics.newQuad(0,0,self.img:getWidth(),self.img:getHeight()*0.5,self.img:getDimensions()),
+			love.graphics.newQuad(0,self.img:getHeight()*0.5,self.img:getWidth(),self.img:getHeight()*0.5,self.img:getDimensions())
+			}
+		self.font= font or love.graphics.getFont();
 		return self;
 	end
 
 	function BUTTON.render(self)
+		local oldFont = love.graphics.getFont();
+		love.graphics.setFont(self.font);
 		if not self.held then
-			love.graphics.rectangle("line",self.x1,self.y1,self.x2,self.y2);
+			love.graphics.draw(self.img,self.quads[2],self.x1,self.y1,nil,self.dX/self.img:getWidth(),self.dY/(self.img:getHeight()*0.5));
 			love.graphics.print(self.label,self.x1,self.y1,0,self.scale[1],self.scale[2]);
 		else
-			love.graphics.rectangle("fill",self.x1,self.y1,self.x2,self.y2);
+			love.graphics.draw(self.img,self.quads[1],self.x1,self.y1,nil,self.dX/self.img:getWidth(),self.dY/(self.img:getHeight()*0.5));
 			local oldC = {love.graphics.getColor()};
 			love.graphics.setColor(255-oldC[1],255-oldC[2],255-oldC[3],oldC[4]);
 			love.graphics.print(self.label,self.x1,self.y1,0,self.scale[1],self.scale[2]);
 			love.graphics.setColor(oldC);
 		end
+		love.graphics.setFont(oldFont);
 	end
 	
 	function BUTTON.update(self)
@@ -243,7 +271,7 @@ BUTTON.__index = BUTTON
 		if not acts[1] then return; end
 		local inbounds;
 		for k,v in ipairs(acts) do
-			if(self.x1<=acts[k][1] and self.y1<=acts[k][2] and (self.x2+self.x1)>=acts[k][1] and (self.y2+self.y1)>=acts[k][2]) then
+			if(self.x1<=acts[k][1] and self.y1<=acts[k][2] and (self.dX+self.x1)>=acts[k][1] and (self.dY+self.y1)>=acts[k][2]) then
 				inbounds = k;
 			end
 		end

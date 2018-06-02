@@ -10,7 +10,7 @@ function MENU.load(string)
 				obj[k] = load("return "..v)();
 			end
 		end
-		MENU.currentMenu[i] = _G[obj.type].new(obj.pos,obj.val,obj.varStr,obj.fntSCL,obj.title);
+		MENU.currentMenu[i] = _G[obj.type].new(obj.pos,obj.val,obj.varStr,obj.font,obj.fntSCL,obj.title,obj.img,obj.quads);
 	end
 end
 

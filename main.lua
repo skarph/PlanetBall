@@ -55,7 +55,7 @@ function love.draw()
 	
 	if doUpdate then
 		for i=1, BALL.lastIndex do
-			err,msg = pcall(BALL.draw,BALL.list[i]);--incase BALL[i]==nil
+			err,msg = pcall(BALL.drawTrail,BALL.list[i]);--incase BALL[i]==nil
 		end
 	end
 
@@ -66,15 +66,13 @@ function love.draw()
 	love.graphics.setColor(0xFF,0xFF,0xFF,0xFF);
 	love.graphics.draw(canvas);
 
-	love.graphics.setColor(0xFF,0xFF,0x1F,0xFF);
+	love.graphics.setColor(0xFF,0xFF,0xFF,0xFF);
 	love.graphics.setBlendMode("alpha", "alphamultiply");
 	MENU.render();
 	
 	for i=1, BALL.lastIndex do
 		err,msg = pcall(BALL.draw,BALL.list[i]);--incase BALL[i]==nil
 	end
-	love.graphics.setColor(0xFF,0xFF,0x1F,0xFF);
-	love.graphics.print(GTIME,0,0);
 	
 end
 
@@ -95,7 +93,7 @@ function update(dtime,touches)
 	for k,v in ipairs(touches) do
 		local xC = (touches[k][1] - BALL.ballCenter[1]) / BALL.ballScale ;
       	local yC = (touches[k][2]- BALL.ballCenter[2]) / BALL.ballScale ;
-		touchBalls[k] = BALL.new(xC,yC,1,touchMass);
+		touchBalls[k] = BALL.new(xC,yC,0,touchMass);
 	end
 	BALL.grav(); --solve gravity
 	

@@ -3,8 +3,10 @@
 	 "pos"     : "{200,50,400,100}",
 	 "val"     : "{-7,50,5}",
 	 "varStr"  : ["BALL","G"],
-	 "title"   : "G CONST",
-	 "fntSCL"  : "{2,2}"
+	 "title"   : "Gravity",
+	 "font"    : "ASSET.fonts.JosefinSans.SemiBold",
+	 "fntSCL"  : "{2,2}",
+	 "img"     : "ASSET.sprites.slider"
 	},
 	
 	{"type"    : "TOGGLE",
@@ -12,7 +14,9 @@
 	 "val"     : true,
 	 "varStr"  : "doUpdate",
 	 "title"   : "Moving",
-	 "fntSCL"  : "{nil,nil}"
+	 "font"    : "ASSET.fonts.JosefinSans.Regular",
+	 "fntSCL"  : "{1.2,1.2}",
+	 "img"     : "ASSET.sprites.button"
 	},
 	
 	{"type"    : "BUTTON",
@@ -20,7 +24,9 @@
 	 "val"     : "function(held) if held then return; end local first = nil; local found = false; for k,v in pairs(ASSET.levels) do if not first then first = v; end if found then LEVEL.unload(); LEVEL.load(v); love.graphics.clear(); return; end if v==LEVEL.currentLevel then found = true; end end LEVEL.unload(); LEVEL.load(first); love.graphics.clear(); end",
 	 "varStr"  : null,
 	 "title"   : "Level\nCycle",
-	 "fntSCL"  : "{nil,nil}"
+	 "font"    : "ASSET.fonts.JosefinSans.Light",
+	 "fntSCL"  : "{1.5,1.5}",
+	 "img"     : "ASSET.sprites.button"
 	},
 	
 	{"type"    : "BUTTON",
@@ -28,7 +34,9 @@
 	 "val"     : "function(held) BALL.ballScale = BALL.ballScale + 0.01; end",
 	 "varStr"  : null,
 	 "title"   : "+",
-	 "fntSCL"  : "{5,5}"
+	 "font"    : "ASSET.fonts.JosefinSans.Regular",
+	 "fntSCL"  : "{5,5}",
+	 "img"     : "ASSET.sprites.button"
 	},
 	
 	{"type"    : "BUTTON",
@@ -36,6 +44,8 @@
 	 "val"     : "function(held) BALL.ballScale = BALL.ballScale - 0.01; end",
 	 "varStr"  : null,
 	 "title"   : "-",
-	 "fntSCL"  : "{5,5}"
+	 "font"    : "ASSET.fonts.JosefinSans.Regular",
+	 "fntSCL"  : "{5,5}",
+	 "img"     : "ASSET.sprites.button"
 	}
 ]

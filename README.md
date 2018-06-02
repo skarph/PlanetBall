@@ -1,5 +1,5 @@
 # Planet Ball 
-## Version 0.2.0 BETA
+## Version 0.3.0 BETA-DEMO
 ### *A planetary golf-like game built on LÖVE 0.10.2*
 
 Comments in the code attempt to explain any functions. Contact for clarification/updating comments.
@@ -13,29 +13,30 @@ Lower time spent using/creating these wells will result in a higher score.
 ##### FEATURES
 - [x] Objective Ball System
 - [x] Collision System
-- [x] Gravity
-- [x] Levels
+- [x] Adjustable Gravity
+- [x] Two whole levels
 - [x] Level select
 - [x] Menus
 - [x] Some good design
 - [x] Trails
-- [x] Touch controls!
-- [x] Camera Panning
-##### TODO:
-- [ ] Add pre-made graphics
-#### SPECIFICS:
-Balls have their own:
-* Color
-* Mass
-* Radius
-* Position
-* Velocity
-* Acceleration
-	
-A player can create an invisible 'ball' upon interaction[touch/click] with the game.
-It has no color, velocity, acceleration, or radius, and has a constant mass; This is to encourage planning of the use of one's clicking.
-Think of it like an interactor, balls come towards your mouse
-
+- [x] Touch controls
+- [x] Camera Panning and zooming
+- [x] fancy-smanshy graphics
+- [x] Level Loader system (Make your own! Maybe!)
+- [x] Menu Loader system (Make your own menus?)
+- [x] General-Purpose loader system (Make your own... something)
+- [x] Hmmm
+- [x] AND MAYBE SOME MORE!
+##### CONTROLS: 
+* Click/touch        : Player attracts balls
+* Up/Down/Left/Right : Pan the Camera
+* -/+                : Zoom the Camera
+* Space Bar          : Pause/Unpause the simulation
+###### In-Game Buttons
+* Gravity Slider     : Adjust the Gravitational Constant-- negative values repell!
+* Level Cycle        : Cycle through playing one of the two levels
+* Moving             : Pause/Unpause the simulation
+* -/+                : Zoom the Camera
 #### RELEASE HISTORY:
 
 0.0.0: initial collision/physics work, never released
@@ -55,7 +56,8 @@ Think of it like an interactor, balls come towards your mouse
 0.0.4: Added levels and JSON support for levels, added asset handler
 
 
-0.1.0: Fixed and added JSON support for menus, buttons now execute functions.
+0.1.0: 
+      Fixed and added JSON support for menus, buttons now execute functions.
 	  
 	  Also fixed screen burn issue with balls, they now fade appropriately
 	  
@@ -71,10 +73,24 @@ Think of it like an interactor, balls come towards your mouse
  |a: fixed compatibility with windows
 
 
-0.2.0: Finished the Camera
+0.2.0: 
+      Finished the Camera
 	  
 	  Added touch control.
 	  
 	  Improved UI.
 	  
 	  Added a function to get absolute distance between two vector-valued tables
+	  
+	  
+0.3.0: 
+	  Added (some) support for sprites
+	  
+	  Also added Sprites
+	  
+	  Improved trails
+	  
+	  Final fix to UI
+	  
+	  Also probably final update (except for bug fixes). This is officially a demo now!
+	  
