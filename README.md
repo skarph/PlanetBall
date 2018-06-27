@@ -1,5 +1,5 @@
 # Planet Ball 
-## Version 0.3.0 BETA-DEMO
+## Version 0.3.1 BETA-DEMO
 ### *A planetary golf-like game built on LÖVE 0.10.2*
 
 Comments in the code attempt to explain any functions. Contact for clarification/updating comments.
@@ -94,3 +94,9 @@ Lower time spent using/creating these wells will result in a higher score.
 	  
 	  Also probably final update (except for bug fixes). This is officially a demo now!
 	  
+0.3.1:
+	  Fixed zooming
+	  
+	  Fixed/added  music capabilites
+	  
+	  Better pausing/trails

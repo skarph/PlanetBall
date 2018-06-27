@@ -21,6 +21,7 @@ function LEVEL.unload()-->> unloads data
 	
 	for i=1,BALL.lastIndex do
 		BALL.list[i] = nil;
+		GTIME = 0;
 	end
 	
 	LEVEL.currentLevel = nil;

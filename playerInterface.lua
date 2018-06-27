@@ -1,7 +1,5 @@
 PINTER = {};
 COMMAND = {};
-PINTER.COOLCONST = 0;
-PINTER.coolTime = PINTER.COOLCONST;
 COMMAND.PANUP = {key = "up"};
 COMMAND.PANDOWN = {key = "down"};
 COMMAND.PANLEFT = {key = "left"};
@@ -13,7 +11,9 @@ COMMAND.ZOOMOUT = {key = "-"};
 COMMAND.PAUSE = {key = "space"};
 COMMAND.ASSIGN = {key = "escape"};
 
-function PINTER.getInteractions()
+TOUCHES = {};
+
+function PINTER.doInteractions()
   returnTable = {};
   touches = love.touch.getTouches();
   local mouse = 0;
@@ -34,18 +34,16 @@ function PINTER.getInteractions()
     local i=k+1
     while(not(returnTable[i]==nil)) do
 		dist = returnTable[k]:distTo(returnTable[i]);
-		if(dist<75 and PINTER.coolTime < 0) then
-			print(BALL.cenTar[1],BALL.cenTar[2]);
+		if(dist<100) then
 			local midpoint = (returnTable[k]+returnTable[i-1])/2;
 			BALL.cenTar = BALL.cenTar + (midpoint-BALL.cenTar);
-			print(BALL.cenTar[1],BALL.cenTar[2]);
-			PINTER.coolTime = PINTER.COOLCONST;
-			return {};	
+			table.remove(returnTable,k);
+			table.remove(returnTable,i);
 		end
 		i = i + 1;
 	end
   end
-  return returnTable;
+  TOUCHES = returnTable;
 end
 
 function PINTER.getKeyAssignment(key)
@@ -93,27 +91,26 @@ function COMMAND.PANRIGHT.callback(pressed,released,held)
   end
 end
 
-function COMMAND.ROTCW.callback(pressed,released,held)
-	
-end
-
-function COMMAND.ROTCCW.callback(pressed,released,held)
-	
-end
-
 function COMMAND.ZOOMIN.callback(pressed,released,held)
-	BALL.ballScale = BALL.ballScale + 0.01;
+	 if(not pressed and not released) then
+		BALL.ballScale = BALL.ballScale + 0.01*BALL.ballScale;
+		BALL.cenTar = BALL.cenTar + ((BALL.cenTar-V.vectorize({winW/2,winH/2})) * 0.01);
+		BALL.ballCenter = BALL.ballCenter + ((BALL.ballCenter-V.vectorize({winW/2,winH/2})) * 0.01);
+	end
 end
-
 function COMMAND.ZOOMOUT.callback(pressed,released,held)
-	BALL.ballScale = BALL.ballScale - 0.01;
+	 if(not pressed and not released) then
+		BALL.ballScale = BALL.ballScale - 0.01*BALL.ballScale;
+		BALL.cenTar = BALL.cenTar - ((BALL.cenTar-V.vectorize({winW/2,winH/2})) * 0.01);
+		BALL.ballCenter = BALL.ballCenter - ((BALL.ballCenter-V.vectorize({winW/2,winH/2})) * 0.01);
+	end
 end
 
 function COMMAND.PAUSE.callback(pressed,released,held)
-	if(released and not doUpdate and not(COMMAND.PAUSE.wasHeld)) then
-		doUpdate = true;
-	elseif(pressed and doUpdate ) then
-		doUpdate = false;
+	if(released and not BALL.doPhysUp and not(COMMAND.PAUSE.wasHeld)) then
+		BALL.doPhysUp = true;
+	elseif(pressed and BALL.doPhysUp ) then
+		BALL.doPhysUp = false;
 		COMMAND.PAUSE.wasHeld = true;
 	end
 	if(released) then

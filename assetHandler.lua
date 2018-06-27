@@ -1,7 +1,8 @@
 ASSET = {};
 ASSET.__DIR = "assets";
 ASSET.__EXT = {};
-ASSET.__EXT.SOUND = {"wav","mp4","ogg"};
+ASSET.__EXT.MUSIC = {"wav","mp3"};
+ASSET.__EXT.SOUND = {"ogg"}
 ASSET.__EXT.GRAPHIC = {"png","jpg"};
 ASSET.__EXT.FONT = {"ttf"};
 ASSET.__EXT.LEVEL = {"json"};
@@ -35,7 +36,9 @@ function ASSET.load(p,upTable)--recursively loads all assets in path or main dir
 			local dataType = ASSET.__getType(ext);
 			--Determine/Load asset
 			if dataType == "SOUND" then
-				upTable[indexName] = love.sound.newSoundData(path.."/"..rPath);
+				upTable[indexName] = love.audio.newSource(path.."/"..rPath,"static");
+			elseif dataType == "MUSIC" then
+				upTable[indexName] = love.audio.newSource(path.."/"..rPath,"stream");
 			elseif dataType == "GRAPHIC" then
 				upTable[indexName] = love.graphics.newImage(path.."/"..rPath);
 			elseif dataType == "FONT" then

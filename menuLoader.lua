@@ -10,7 +10,7 @@ function MENU.load(string)
 				obj[k] = load("return "..v)();
 			end
 		end
-		MENU.currentMenu[i] = _G[obj.type].new(obj.pos,obj.val,obj.varStr,obj.font,obj.fntSCL,obj.title,obj.img,obj.quads);
+		MENU.currentMenu[i] = GUI[obj.type].new(obj.type,obj.pos,obj.font,obj.fntSCL,obj.title,obj.img,obj.quads,obj.val,obj.varStr);
 	end
 end
 
@@ -26,7 +26,7 @@ end
 
 function MENU.update()
 	for i,obj in ipairs(MENU.currentMenu) do
-		obj:update();
+		obj:update(TOUCHES);
 	end
 end
 

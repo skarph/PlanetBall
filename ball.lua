@@ -13,6 +13,11 @@ BALL.ballCenter = V.vectorize{winW/2,winH/2}; --onscreen coords corresponding to
 BALL.cenTar = BALL.ballCenter; --centaurs (center target)
 BALL.cenSpe = 500;
 BALL.superJumpDist = 0.5;
+BALL.pTimeMult = 1;
+BALL.touchMass = 500; --mass of invisible ball spawned upon click
+BALL.doPhysUp = false; --do updates for balls
+BALL.tailLen = 0x01;
+
 function BALL.approachBallCenter(tick)
 	local jumpDist = tick*BALL.cenSpe;
 	if BALL.ballCenter:distTo(BALL.cenTar) < BALL.cenSpe then
@@ -165,6 +170,6 @@ function BALL.drawTrail(self,disp,scale)
 	local disp = disp or {BALL.ballCenter[1] , BALL.ballCenter[2]}
 	local scale = scale or BALL.ballScale;
 	love.graphics.setColor(self.color);
-	love.graphics.circle('fill',(self.pos[1]*scale) + disp[1],(self.pos[2]*scale) + disp[2],self.rad*scale);--draw self *shrug*
+	love.graphics.circle('fill',(self.pos[1]*scale) + disp[1],(self.pos[2]*scale) + disp[2],(self.rad-1)*math.abs(scale));--draw self *shrug*
 	love.graphics.setColor(mR,mG,mB,mA);--reapply old colors
 end

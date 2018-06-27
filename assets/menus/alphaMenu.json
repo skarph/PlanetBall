@@ -8,11 +8,20 @@
 	 "fntSCL"  : "{2,2}",
 	 "img"     : "ASSET.sprites.slider"
 	},
-	
+	{
+	"type"    : "SLIDER",
+	 "pos"     : "{0,winH-100,400,100}",
+	 "val"     : "{-1,5,1}",
+	 "varStr"  : ["BALL","pTimeMult"],
+	 "title"   : "Time",
+	 "font"    : "ASSET.fonts.JosefinSans.SemiBold",
+	 "fntSCL"  : "{2,2}",
+	 "img"     : "ASSET.sprites.slider"
+	},
 	{"type"    : "TOGGLE",
 	 "pos"     : "{winW - 100,winH  - 100,100,100}",
 	 "val"     : true,
-	 "varStr"  : "doUpdate",
+	 "varStr"  : ["BALL","doPhysUp"],
 	 "title"   : "Moving",
 	 "font"    : "ASSET.fonts.JosefinSans.Regular",
 	 "fntSCL"  : "{1.2,1.2}",
@@ -31,7 +40,7 @@
 	
 	{"type"    : "BUTTON",
 	 "pos"     : "{winW - 100,200,100,100}",
-	 "val"     : "function(held) BALL.ballScale = BALL.ballScale + 0.01; end",
+	 "val"     : "function(held) COMMAND.ZOOMIN.callback(false,false,held); end",
 	 "varStr"  : null,
 	 "title"   : "+",
 	 "font"    : "ASSET.fonts.JosefinSans.Regular",
@@ -41,7 +50,7 @@
 	
 	{"type"    : "BUTTON",
 	 "pos"     : "{winW - 100,300,100,100}",
-	 "val"     : "function(held) BALL.ballScale = BALL.ballScale - 0.01; end",
+	 "val"     : "function(held) COMMAND.ZOOMOUT.callback(false,false,held); end",
 	 "varStr"  : null,
 	 "title"   : "-",
 	 "font"    : "ASSET.fonts.JosefinSans.Regular",
